@@ -1,0 +1,23 @@
+{
+    "files.associations": {
+        "unordered_map": "cpp",
+        "__verbose_abort": "cpp",
+        "cmath": "cpp",
+        "cstdint": "cpp",
+        "cstdlib": "cpp",
+        "cstring": "cpp",
+        "memory": "cpp",
+        "initializer_list": "cpp",
+        "iosfwd": "cpp",
+        "limits": "cpp",
+        "new": "cpp",
+        "stdexcept": "cpp",
+        "typeinfo": "cpp",
+        "variant": "cpp",
+        "cstddef": "cpp",
+        "deque": "cpp",
+        "string": "cpp",
+        "vector": "cpp",
+        "optional": "cpp"
+    }
+}

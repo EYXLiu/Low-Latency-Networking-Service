@@ -12,4 +12,5 @@ struct Message {
 
     std::vector<uint8_t> serialize() const;
     static std::unique_ptr<Message> deserialize(const std::vector<uint8_t>& buffer);
+    std::unique_ptr<Message> clone() const;
 };

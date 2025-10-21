@@ -7,7 +7,7 @@ class ConnectionManager;
 
 class Acceptor {
 public:
-    Acceptor(int port, Reactor* reactor, ConnectionManager* conn_mgr);
+    Acceptor(int port, Reactor& reactor, ConnectionManager& conn_mgr);
     ~Acceptor();
 
     void start_accepting();
@@ -15,8 +15,8 @@ public:
 private:
     int listen_fd_;
     int port_;
-    Reactor* reactor;
-    ConnectionManager* conn_mgr;
+    Reactor& reactor_;
+    ConnectionManager& conn_mgr_;
 
     int setup_listener();
     void handle_new_connection();
