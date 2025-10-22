@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 
-AdminServer::AdminServer(int port) : conn_mgr_(), reactor_(conn_mgr_), acceptor_(port, reactor_, conn_mgr_) {}
+AdminServer::AdminServer(int port) : http_port_(8080), reactor_(conn_mgr_), acceptor_(port, reactor_, conn_mgr_) {}
 
 AdminServer::~AdminServer() { stop(); }
 
