@@ -18,6 +18,9 @@
         "deque": "cpp",
         "string": "cpp",
         "vector": "cpp",
-        "optional": "cpp"
+        "optional": "cpp",
+        "thread": "cpp",
+        "locale": "cpp",
+        "iostream": "cpp"
     }
 }

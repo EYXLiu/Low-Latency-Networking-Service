@@ -3,10 +3,11 @@
 #include <memory>
 #include <mutex>
 #include "connection.h"
+#include "metrics.h"
 
 class ConnectionManager {
 public:
-    ConnectionManager() = default;
+    ConnectionManager();
     ConnectionManager(const ConnectionManager&) = delete;
     ConnectionManager& operator=(const ConnectionManager&) = delete;
 
@@ -14,8 +15,10 @@ public:
     void remove_connection(int fd);
     Connection* get_connection(int fd);
     std::vector<Connection*> get_all_connections();
+    int get_connections();
 
 private:
     std::unordered_map<int, std::unique_ptr<Connection>> connections_;
     std::mutex mtx_;
+    Metrics metrics_;
 };

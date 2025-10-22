@@ -4,6 +4,7 @@
 
 class Reactor;
 class ConnectionManager;
+class Metrics;
 
 class Acceptor {
 public:
@@ -15,6 +16,7 @@ public:
 private:
     int listen_fd_;
     int port_;
+    
     Reactor& reactor_;
     ConnectionManager& conn_mgr_;
 

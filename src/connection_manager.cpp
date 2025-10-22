@@ -1,14 +1,18 @@
 #include "project/connection_manager.h"
 
+ConnectionManager::ConnectionManager() : metrics_() {}
+
 void ConnectionManager::add_connection(std::unique_ptr<Connection> conn) {
     std::lock_guard<std::mutex> lock(mtx_);
     int fd = conn->get_fd();
     connections_[fd] = std::move(conn);
+    metrics_.increment_connections();
 }
 
 void ConnectionManager::remove_connection(int fd) {
     std::lock_guard<std::mutex> lock(mtx_);
     connections_.erase(fd);
+    metrics_.decrement_connections();
 }
 
 Connection* ConnectionManager::get_connection(int fd) {
@@ -24,4 +28,8 @@ std::vector<Connection*> ConnectionManager::get_all_connections() {
         conns.push_back(conn_ptr.get());
     }
     return conns;
+}
+
+int ConnectionManager::get_connections() {
+    return metrics_.get_connections();
 }

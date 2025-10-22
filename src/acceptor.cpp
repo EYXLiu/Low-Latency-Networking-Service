@@ -2,6 +2,7 @@
 #include "project/connection_manager.h"
 #include "project/reactor.h"
 #include "project/connection.h"
+#include "project/metrics.h"
 #include <arpa/inet.h>
 #include <fcntl.h>
 #include <unistd.h>
