@@ -8,7 +8,7 @@
 #include <cstring>
 #include <errno.h>
 
-Reactor::Reactor(ConnectionManager& conn_mgr) : conn_mgr_(conn_mgr) {
+Reactor::Reactor(ConnectionManager& conn_mgr, std::atomic<bool>& running) : conn_mgr_(conn_mgr), running_(running) {
     kqueue_fd_ = kqueue();
     if (kqueue_fd_ < 0) {
         exit(1);
@@ -44,7 +44,7 @@ void Reactor::remove_fd(int fd) {
 }
 
 void Reactor::run_loop() {
-    while (true) {
+    while (running_) {
         int nev = kevent(kqueue_fd_, nullptr, 0, events_, 1024, nullptr);
         if (nev < 0) {
             perror("kevent wait");

@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 
-AdminServer::AdminServer(int port) : http_port_(8080), reactor_(conn_mgr_), acceptor_(port, reactor_, conn_mgr_) {}
+AdminServer::AdminServer(int port) : http_port_(8080), reactor_(conn_mgr_, running_), acceptor_(port, reactor_, conn_mgr_, running_) {}
 
 AdminServer::~AdminServer() { stop(); }
 
@@ -40,24 +40,48 @@ void AdminServer::run_loop() {
     listen(listen_fd_, SOMAXCONN);
 
     std::cout << "Admin server listening on port " << http_port_ << std::endl;
-
+    std::cout << running_ << std::endl;
     while (running_) {
+        fd_set set;
+        FD_ZERO(&set);
+        FD_SET(listen_fd_, &set);
+
+        struct timeval timeout{};
+        timeout.tv_sec = 1;
+        timeout.tv_usec = 0;
+
+        int ret = select(listen_fd_ + 1, &set, nullptr, nullptr, &timeout);
+        if (ret < 0) {
+            perror("select failed");
+            break;
+        } else if (ret == 0) {
+            continue;
+        }
+
         int client_fd = accept(listen_fd_, nullptr, nullptr);
-        if (client_fd < 0) continue;
+        if (client_fd < 0) {
+            perror("accept failed");
+            continue;
+        }
 
         std::thread([this, client_fd]() {
             handle_http_request(client_fd);
         }).detach();
     }
+    close(listen_fd_);
+    std::cout << "Admin server stopped." << std::endl;
 }
 
 void AdminServer::handle_http_request(int client_fd) {
+    std::cout << "request received" << std::endl;
+
     char buffer[1024];
     ssize_t n = read(client_fd, buffer, sizeof(buffer));
     if (n <= 0) { close(client_fd); return; }
 
     std::string request(buffer, n);
     std::string body;
+
 
     if (request.find("GET /metrics") != std::string::npos) {
         body = "{ \"connections\": " + std::to_string(conn_mgr_.get_connections()) + "}";

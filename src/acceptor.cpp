@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <iostream>
 
-Acceptor::Acceptor(int port, Reactor& reactor, ConnectionManager& conn_mgr) : listen_fd_(-1), port_(port), reactor_(reactor), conn_mgr_(conn_mgr) {};
+Acceptor::Acceptor(int port, Reactor& reactor, ConnectionManager& conn_mgr, std::atomic<bool>& running) : listen_fd_(-1), port_(port), reactor_(reactor), conn_mgr_(conn_mgr), running_(running) {};
 
 Acceptor::~Acceptor() { if (listen_fd_ >= 0) close(listen_fd_); }
 
@@ -32,7 +32,7 @@ int Acceptor::setup_listener() {
 }
 
 void Acceptor::handle_new_connection() {
-    while (true) {
+    while (running_) {
         sockaddr_in client_addr{};
         socklen_t addrlen = sizeof(client_addr);
         int client_fd = accept(listen_fd_, (sockaddr*)&client_addr, &addrlen);
@@ -58,7 +58,7 @@ void Acceptor::start_accepting() {
         return;
     }
 
-    while (true) {
+    while (running_) {
         handle_new_connection();
         usleep(1000);
     }
