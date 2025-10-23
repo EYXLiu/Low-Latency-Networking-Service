@@ -7,3 +7,5 @@ TCP socket communication between clients <br/>
 Reactor design pattern with `kqueue` for Mac <br/>
 HTTP endpoint at `:8080` using raw C++ http <br/>
 Auto-creation and deletion of threads <br/>
+Utilized Valgrind, LLDB, and -fsanitize=address for memory and error checking <br/>
+Automated startup and shutdown utilizing `SIGINT` as the default stop check <br/>
