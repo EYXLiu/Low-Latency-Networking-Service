@@ -1,6 +1,7 @@
 # To run
 *This compiler is built solely for Macos* <br/>
-`g++ -std=c++20 -Wall -Wextra -pthread -I./include -o chat main.cpp ./src/*.cpp`
+`g++ -std=c++20 -Wall -Wextra -pthread -I./include -o chat main.cpp ./src/*.cpp` <br/>
+Optionally: `g++ -std=c++20 -Wall -Wextra -pthread -fsanitize=address -g -I./include -o chat main.cpp ./src/*.cpp`
 
 # Features
 TCP socket communication between clients <br/>
